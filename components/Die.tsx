@@ -1,8 +1,9 @@
+import {Button} from "@/components/ui/button";
 
 export default function Die({value} : {value: number}) {
     return (
-        <div className={"bg-white w-[70] h-[70] flex items-center justify-center rounded-md"}>
-            <h3 className={'text-secondary text-2xl font-semibold'}>{value}</h3>
-        </div>
+        <Button className={"bg-white w-[75] h-[75] flex items-center justify-center rounded-md shadow-md cursor-pointer"}>
+            <p className={'text-secondary text-3xl font-bold'}>{value}</p>
+        </Button>
     )
 }
