@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
+import {Particles} from "@/components/ui/particles";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -36,7 +37,17 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
           >
-              {children}
+              <div className="relative min-h-screen overflow-hidden">
+
+                  {/* Background particles */}
+                  <Particles className="absolute inset-0 z-0 pointer-events-none" />
+
+                  {/* Main content */}
+                  <div className="relative z-10">
+                      {children}
+                  </div>
+
+              </div>
           </ThemeProvider>
       </body>
     </html>

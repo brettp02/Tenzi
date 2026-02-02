@@ -1,16 +1,30 @@
 'use client'
 
 import Die from "@/components/Die";
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
 import {Button} from "@/components/ui/button";
 import {nanoid} from "nanoid";
 import Confetti from 'react-confetti'
+import {Particles} from "@/components/ui/particles";
+import useSound from 'use-sound';
 
 export default function Page() {
     const [dice, setDice] = useState(() => generateAllNewDice())
+    const [playPop] = useSound('/pop-sound.wav')
+    const [playRoll] = useSound('/dice-roll.wav')
+    const [playWin] = useSound('/win-sound.wav')
+    
+    const prevGameWon = useRef(false)
 
     const gameWon = (dice.every(die => die.isHeld) &&
         dice.every(die => die.value === dice[0].value))
+    
+    useEffect(() => {
+        if (gameWon && !prevGameWon.current) {
+            playWin()
+        }
+        prevGameWon.current = gameWon
+    }, [gameWon, playWin])
 
     function generateAllNewDice() {
         const newArray = []
@@ -28,6 +42,7 @@ export default function Page() {
     }
 
     function hold(id: string) {
+        playPop()
         setDice(previousDice => {
             return previousDice.map(die => {
                 return die.id === id ?
@@ -38,7 +53,10 @@ export default function Page() {
     }
 
     function rollDice() {
-       gameWon ? setDice(() => generateAllNewDice()) :
+       if (gameWon) {
+           setDice(() => generateAllNewDice())
+       } else {
+           playRoll()
            setDice(previousDice => {
                return previousDice.map(die => {
                    return die.isHeld ?
@@ -47,6 +65,7 @@ export default function Page() {
 
                })
            })
+       }
     }
 
     return (
